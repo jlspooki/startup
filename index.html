@@ -89,10 +89,13 @@
             box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
         }
         
-        /* Page-specific styles */
-        #home-page, #submit-page {
-            min-height: 80vh;
-            padding: 2rem 0;
+        /* Page styles */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
         }
         
         h1 {
@@ -104,15 +107,7 @@
             color: transparent;
         }
         
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        /* Card styles (from previous version) */
+        /* CARD STYLES (fully restored) */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -124,8 +119,233 @@
             background: white;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        
+        .card-front {
+            padding: 1.75rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            padding: 1.75rem;
+            opacity: 0;
+            pointer-events: none;
+            overflow-y: auto;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card.active .card-back {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .card.active .card-front {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        
+        .logo-placeholder {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.25rem;
+            font-weight: bold;
+            color: white;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .company-info {
+            flex: 1;
+        }
+        
+        .company-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .funding-round {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 20px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tag {
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .tag.industry {
+            background: linear-gradient(90deg, var(--primary), #8577E6);
+            color: white;
+        }
+        
+        .tag.service {
+            background: rgba(0, 206, 255, 0.1);
+            color: var(--secondary);
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 1.25rem 0;
+            opacity: 0.2;
+        }
+        
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .services, .looking-for {
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-item, .looking-for-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .service-item::before, .looking-for-item::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            margin-right: 0.75rem;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+        
+        .looking-for-item::before {
+            background: var(--accent);
+        }
+        
+        .contact-email {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+        
+        .email-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(108, 92, 231, 0.1);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .email-link:hover {
+            background: rgba(108, 92, 231, 0.2);
+        }
+        
+        .email-link i {
+            margin-right: 0.5rem;
+        }
+        
+        .website-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .website-link:hover {
+            color: var(--secondary);
+        }
+        
+        .website-link::after {
+            content: "→";
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .website-link:hover::after {
+            transform: translateX(3px);
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--light);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text);
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .back-button:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
         }
         
         /* Form styles */
@@ -154,6 +374,13 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
         }
         
         button[type="submit"] {
@@ -165,6 +392,8 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 1rem;
+            margin-top: 1rem;
         }
         
         button[type="submit"]:hover {
@@ -191,6 +420,10 @@
             
             .cards-container {
                 grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -230,12 +463,12 @@
                 
                 <form id="startup-form" class="submit-form">
                     <div class="form-group">
-                        <label for="company-name">Company Name</label>
+                        <label for="company-name">Company Name *</label>
                         <input type="text" id="company-name" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="funding-round">Funding Stage</label>
+                        <label for="funding-round">Funding Stage *</label>
                         <select id="funding-round" required>
                             <option value="">Select...</option>
                             <option value="Pre-seed">Pre-seed</option>
@@ -243,32 +476,33 @@
                             <option value="Series A">Series A</option>
                             <option value="Series B">Series B</option>
                             <option value="Series C+">Series C+</option>
+                            <option value="Bootstrapped">Bootstrapped</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label for="industry">Primary Industry</label>
+                        <label for="industry">Primary Industry *</label>
                         <input type="text" id="industry" placeholder="Fintech, Healthtech, etc." required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="services">Services Offered (comma separated)</label>
-                        <textarea id="services" rows="3" required></textarea>
+                        <label for="services">Services Offered * (comma separated)</label>
+                        <textarea id="services" rows="3" placeholder="E.g.: Multi-currency accounts, International payments, Corporate cards" required></textarea>
                     </div>
                     
                     <div class="form-group">
-                        <label for="looking-for">Looking For (comma separated)</label>
-                        <textarea id="looking-for" rows="3" required></textarea>
+                        <label for="looking-for">Looking For * (comma separated)</label>
+                        <textarea id="looking-for" rows="3" placeholder="E.g.: Banking partners, Enterprise clients, Investors" required></textarea>
                     </div>
                     
                     <div class="form-group">
-                        <label for="contact-email">Contact Email</label>
-                        <input type="email" id="contact-email" required>
+                        <label for="contact-email">Contact Email *</label>
+                        <input type="email" id="contact-email" placeholder="partnerships@yourstartup.com" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="website">Website URL</label>
-                        <input type="url" id="website">
+                        <input type="url" id="website" placeholder="https://yourstartup.com">
                     </div>
                     
                     <button type="submit">Submit Startup</button>
@@ -319,7 +553,7 @@
                 card.innerHTML = `
                     <div class="card-front">
                         <div class="card-header">
-                            <div class="logo">${startup.name.substring(0,2)}</div>
+                            <div class="logo-placeholder">${startup.name.substring(0,2)}</div>
                             <div class="company-info">
                                 <div class="company-name">${startup.name}</div>
                                 <div class="funding-round">${startup.funding}</div>
@@ -329,7 +563,7 @@
                         <div class="tags">
                             <div class="tag industry">${startup.industry}</div>
                             ${startup.services.slice(0,2).map(service => 
-                                `<div class="tag service">${service}</div>`
+                                `<div class="tag service">${service.length > 15 ? service.substring(0,15)+'...' : service}</div>`
                             ).join('')}
                         </div>
                         
@@ -350,14 +584,55 @@
                         </div>
                         
                         <div class="contact-email">
-                            <a href="mailto:${startup.email}" class="email-link">
+                            <a href="mailto:${startup.email}" class="email-link" onclick="event.stopPropagation()">
                                 <i>✉</i> ${startup.email}
                             </a>
                         </div>
                         
-                        ${startup.website ? `<a href="${startup.website}" class="website-link" target="_blank">Visit website</a>` : ''}
+                        ${startup.website ? `<a href="${startup.website}" class="website-link" target="_blank" onclick="event.stopPropagation()">Visit website</a>` : ''}
+                    </div>
+                    
+                    <div class="card-back">
+                        <button class="back-button">×</button>
+                        <h2 class="company-name">${startup.name}</h2>
+                        <div class="funding-round">${startup.funding}</div>
+                        
+                        <div class="divider"></div>
+                        
+                        <h3 class="section-title">About</h3>
+                        <p>${startup.name} is a ${startup.industry} startup based in Hong Kong. Here are more details about their offerings and needs.</p>
+                        
+                        <h3 class="section-title">Key Features</h3>
+                        ${startup.services.map(service => 
+                            `<div class="service-item">${service}</div>`
+                        ).join('')}
+                        
+                        <h3 class="section-title">Contact</h3>
+                        <div class="contact-email">
+                            <a href="mailto:${startup.email}" class="email-link" onclick="event.stopPropagation()">
+                                <i>✉</i> ${startup.email}
+                            </a>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">For business inquiries and partnerships</p>
+                        </div>
+                        
+                        ${startup.website ? `<a href="${startup.website}" class="website-link" target="_blank" onclick="event.stopPropagation()">Explore website →</a>` : ''}
                     </div>
                 `;
+                
+                // Add click handlers
+                card.addEventListener('click', function() {
+                    if (!event.target.closest('a')) { // Don't flip if clicking links
+                        this.classList.toggle('active');
+                    }
+                });
+                
+                // Back button handler
+                const backButton = card.querySelector('.back-button');
+                backButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    card.classList.remove('active');
+                });
+                
                 container.appendChild(card);
             });
         }
@@ -369,7 +644,7 @@
             const newStartup = {
                 id: startups.length + 1,
                 name: document.getElementById('company-name').value,
-                funding: document.getElementById('funding-round').value,
+                funding: document.getElementById('funding-round').value + (document.getElementById('funding-round').value === 'Bootstrapped' ? '' : ' • $__M'),
                 industry: document.getElementById('industry').value,
                 services: document.getElementById('services').value.split(',').map(s => s.trim()),
                 lookingFor: document.getElementById('looking-for').value.split(',').map(s => s.trim()),
@@ -395,6 +670,7 @@
                 page.classList.remove('active');
             });
             document.getElementById(`${pageId}-page`).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
         document.querySelectorAll('.nav-link, .cta-button').forEach(link => {
