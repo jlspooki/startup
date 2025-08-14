@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Startup Pulse | Directory</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEFF;
+            --accent: #FF7675;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --text: #636E72;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(0, 206, 255, 0.05) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        /* Page-specific styles */
+        #home-page, #submit-page {
+            min-height: 80vh;
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Card styles (from previous version) */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        /* Form styles */
+        .submit-form {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+        
+        button[type="submit"] {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            color: var(--text);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">HK Startup Pulse</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link" data-page="home">Home</a>
+                    <a href="#" class="nav-link" data-page="submit">List Your Startup</a>
+                    <a href="#" class="cta-button" data-page="submit">Submit Startup</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <div class="container">
+                <h1>Hong Kong Startup Directory</h1>
+                <p>Discover innovative startups and connect with founders</p>
+                
+                <div class="cards-container" id="startup-cards">
+                    <!-- Cards will be auto-populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Startup Page -->
+        <div id="submit-page" class="page">
+            <div class="container">
+                <h1>List Your Startup</h1>
+                <p>Join Hong Kong's most vibrant startup community</p>
+                
+                <form id="startup-form" class="submit-form">
+                    <div class="form-group">
+                        <label for="company-name">Company Name</label>
+                        <input type="text" id="company-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="funding-round">Funding Stage</label>
+                        <select id="funding-round" required>
+                            <option value="">Select...</option>
+                            <option value="Pre-seed">Pre-seed</option>
+                            <option value="Seed">Seed</option>
+                            <option value="Series A">Series A</option>
+                            <option value="Series B">Series B</option>
+                            <option value="Series C+">Series C+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="industry">Primary Industry</label>
+                        <input type="text" id="industry" placeholder="Fintech, Healthtech, etc." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="services">Services Offered (comma separated)</label>
+                        <textarea id="services" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="looking-for">Looking For (comma separated)</label>
+                        <textarea id="looking-for" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email">Contact Email</label>
+                        <input type="email" id="contact-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website URL</label>
+                        <input type="url" id="website">
+                    </div>
+                    
+                    <button type="submit">Submit Startup</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 HK Startup Pulse. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data - in a real app this would come from a database
+        let startups = [
+            {
+                id: 1,
+                name: "Neat",
+                funding: "Series B • $15M",
+                industry: "Fintech",
+                services: ["Multi-currency accounts", "International payments", "Corporate cards"],
+                lookingFor: ["Banking partners", "Enterprise clients"],
+                email: "partnerships@neat.hk",
+                website: "https://neat.hk"
+            },
+            {
+                id: 2,
+                name: "Bowtie",
+                funding: "Series C • $30M",
+                industry: "Insurtech",
+                services: ["Digital health insurance", "Medical underwriting", "Telemedicine"],
+                lookingFor: ["Hospital partnerships", "Enterprise clients"],
+                email: "hello@bowtie.com.hk",
+                website: "https://bowtie.com.hk"
+            }
+        ];
+
+        // Render startup cards
+        function renderStartups() {
+            const container = document.getElementById('startup-cards');
+            container.innerHTML = '';
+            
+            startups.forEach(startup => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-front">
+                        <div class="card-header">
+                            <div class="logo">${startup.name.substring(0,2)}</div>
+                            <div class="company-info">
+                                <div class="company-name">${startup.name}</div>
+                                <div class="funding-round">${startup.funding}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tags">
+                            <div class="tag industry">${startup.industry}</div>
+                            ${startup.services.slice(0,2).map(service => 
+                                `<div class="tag service">${service}</div>`
+                            ).join('')}
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="services">
+                            <div class="section-title">Services Offered</div>
+                            ${startup.services.map(service => 
+                                `<div class="service-item">${service}</div>`
+                            ).join('')}
+                        </div>
+                        
+                        <div class="looking-for">
+                            <div class="section-title">Looking For</div>
+                            ${startup.lookingFor.map(item => 
+                                `<div class="looking-for-item">${item}</div>`
+                            ).join('')}
+                        </div>
+                        
+                        <div class="contact-email">
+                            <a href="mailto:${startup.email}" class="email-link">
+                                <i>✉</i> ${startup.email}
+                            </a>
+                        </div>
+                        
+                        ${startup.website ? `<a href="${startup.website}" class="website-link" target="_blank">Visit website</a>` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Form submission
+        document.getElementById('startup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newStartup = {
+                id: startups.length + 1,
+                name: document.getElementById('company-name').value,
+                funding: document.getElementById('funding-round').value,
+                industry: document.getElementById('industry').value,
+                services: document.getElementById('services').value.split(',').map(s => s.trim()),
+                lookingFor: document.getElementById('looking-for').value.split(',').map(s => s.trim()),
+                email: document.getElementById('contact-email').value,
+                website: document.getElementById('website').value
+            };
+            
+            // In a real app, you would send this to a server/database
+            startups.push(newStartup);
+            renderStartups();
+            
+            // Show success message and reset form
+            alert('Your startup has been submitted!');
+            this.reset();
+            
+            // Switch back to home page
+            showPage('home');
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(`${pageId}-page`).classList.add('active');
+        }
+
+        document.querySelectorAll('.nav-link, .cta-button').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                showPage(page);
+            });
+        });
+
+        // Initial render
+        renderStartups();
+    </script>
+</body>
+</html>
