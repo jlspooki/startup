@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK Startup Pulse | Showcase Your Startup</title>
+    <title>HK Startup Pulse | Interactive Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #4361EE;
@@ -12,6 +13,8 @@
             --light: #F8F9FA;
             --text: #2B2D42;
             --highlight: #4CC9F0;
+            --success: #4CAF50;
+            --warning: #FF9800;
             --bg-gradient: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
         }
         
@@ -28,6 +31,7 @@
             background: var(--bg-gradient);
             color: var(--text);
             line-height: 1.6;
+            padding-bottom: 2rem;
         }
         
         .container {
@@ -36,11 +40,16 @@
             padding: 0 2rem;
         }
         
-        /* Vibrant Header */
+        /* Header */
         header {
             padding: 2rem 0;
             position: relative;
             z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .logo {
@@ -53,13 +62,25 @@
             letter-spacing: -0.5px;
         }
         
-        /* Hero with Abstract Shapes */
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        /* Hero */
         .hero {
-            min-height: 80vh;
+            min-height: 60vh;
             display: flex;
             align-items: center;
             position: relative;
             overflow: hidden;
+            padding: 4rem 0;
         }
         
         .hero::before {
@@ -92,12 +113,42 @@
             margin-bottom: 2.5rem;
         }
         
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin: 2rem 0;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .tab-button {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text);
+            opacity: 0.7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            opacity: 1;
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
         /* Featured Startups - Grid */
         .featured {
-            padding: 6rem 0;
-            background: white;
-            border-radius: 2rem 2rem 0 0;
-            box-shadow: 0 -20px 40px rgba(0,0,0,0.03);
+            padding: 3rem 0;
         }
         
         .section-header {
@@ -124,6 +175,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
         
         .startup-card {
@@ -133,6 +185,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid rgba(0,0,0,0.03);
             transition: all 0.3s ease;
+            position: relative;
         }
         
         .startup-card:hover {
@@ -208,96 +261,147 @@
             color: var(--accent);
         }
         
-        /* Benefits Section */
-        .benefits {
-            padding: 6rem 0;
-            background: var(--bg-gradient);
-        }
-        
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .benefit-card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            transition: all 0.3s ease;
-        }
-        
-        .benefit-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .benefit-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--highlight));
+        .delete-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(244, 67, 54, 0.1);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: #f44336;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
-            color: white;
-            font-size: 1.5rem;
+            transition: all 0.3s ease;
         }
         
-        .benefit-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--secondary);
+        .delete-btn:hover {
+            background: rgba(244, 67, 54, 0.2);
         }
         
-        .benefit-desc {
-            color: var(--text);
-            opacity: 0.8;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 6rem 0;
-            text-align: center;
+        /* Form Styles */
+        .form-container {
             background: white;
+            border-radius: 2rem;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            max-width: 800px;
         }
         
-        .cta-box {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .cta-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
             color: var(--secondary);
         }
         
-        .cta-subtitle {
-            font-size: 1.1rem;
-            color: var(--text);
-            opacity: 0.8;
-            margin-bottom: 2rem;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         
-        .cta-button {
-            display: inline-block;
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-group input {
+            margin-right: 0.5rem;
+        }
+        
+        .submit-btn {
             background: linear-gradient(90deg, var(--primary), var(--accent));
             color: white;
+            border: none;
             padding: 1.2rem 2.5rem;
             border-radius: 50px;
             font-weight: 700;
-            text-decoration: none;
+            font-size: 1.1rem;
+            cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(67,97,238,0.2);
+            display: block;
+            width: 100%;
+            margin-top: 1.5rem;
         }
         
-        .cta-button:hover {
+        .submit-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(67,97,238,0.3);
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            background-color: var(--success);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+            font-weight: 600;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #e9ecef;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h3 {
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 2rem;
         }
         
         /* Footer */
@@ -306,6 +410,7 @@
             text-align: center;
             background: var(--secondary);
             color: white;
+            margin-top: 4rem;
         }
         
         .footer-logo {
@@ -339,12 +444,33 @@
                 padding: 0 1.5rem;
             }
             
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                margin-top: 1.5rem;
+            }
+            
+            nav a {
+                margin: 0 1rem;
+            }
+            
             .hero {
                 min-height: auto;
                 padding: 4rem 0;
             }
             
             .startups-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 2rem;
+            }
+            
+            .form-checkboxes {
                 grid-template-columns: 1fr;
             }
             
@@ -359,124 +485,135 @@
     <header>
         <div class="container">
             <div class="logo">HK Startup Pulse</div>
+            <nav>
+                <a href="#featured">Featured</a>
+                <a href="#submit">Submit</a>
+                <a href="#directory">Directory</a>
+            </nav>
         </div>
     </header>
     
-    <main>
+    <main class="container">
         <section class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1>Showcase your startup to Hong Kong's ecosystem</h1>
-                    <p class="hero-subhead">Get discovered by potential partners, clients, and collaborators. No middlemen—just direct visibility.</p>
-                    <a href="#submit" class="cta-button">List your startup →</a>
-                </div>
+            <div class="hero-content">
+                <h1>Showcase your startup to Hong Kong's ecosystem</h1>
+                <p class="hero-subhead">Get discovered by potential partners, clients, and collaborators. No middlemen—just direct visibility.</p>
+                <a href="#submit" class="cta-button">List your startup →</a>
+            </div>
+        </section>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="featured">Featured Startups</button>
+            <button class="tab-button" data-tab="directory">Full Directory</button>
+            <button class="tab-button" data-tab="submit">Submit Your Startup</button>
+        </div>
+
+        <section id="featured" class="tab-content active">
+            <div class="section-header">
+                <h2 class="section-title">Recently Featured</h2>
+                <p class="section-subtitle">See how other startups are presenting themselves</p>
+            </div>
+            
+            <div class="startups-grid" id="featured-startups">
+                <!-- Featured startups will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <section id="directory" class="tab-content">
+            <div class="section-header">
+                <h2 class="section-title">Startup Directory</h2>
+                <p class="section-subtitle">Browse all startups in our community</p>
+            </div>
+            
+            <div class="startups-grid" id="all-startups">
+                <!-- All startups will be loaded here by JavaScript -->
             </div>
         </section>
         
-        <section class="featured">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Recently Featured</h2>
-                    <p class="section-subtitle">See how other startups are presenting themselves</p>
-                </div>
-                
-                <div class="startups-grid">
-                    <!-- Startup 1 -->
-                    <div class="startup-card">
-                        <div class="startup-header">
-                            <div class="startup-logo">NE</div>
-                            <div>
-                                <h3 class="startup-name">Neat</h3>
-                                <p class="startup-meta">Fintech • Series B</p>
+        <section id="submit" class="tab-content">
+            <div class="form-container">
+                <h2 class="form-title">Submit Your Startup</h2>
+                <form id="startup-form">
+                    <div class="form-group">
+                        <label for="startup-name" class="form-label">Startup Name</label>
+                        <input type="text" id="startup-name" class="form-input" required placeholder="Enter your startup name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="industry" class="form-label">Industry</label>
+                        <select id="industry" class="form-select" required>
+                            <option value="">Select your industry</option>
+                            <option value="Fintech">Fintech</option>
+                            <option value="Insurtech">Insurtech</option>
+                            <option value="Retail Tech">Retail Tech</option>
+                            <option value="Healthtech">Healthtech</option>
+                            <option value="AI/Machine Learning">AI/Machine Learning</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="EdTech">EdTech</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stage" class="form-label">Funding Stage</label>
+                        <select id="stage" class="form-select" required>
+                            <option value="">Select funding stage</option>
+                            <option value="Pre-seed">Pre-seed</option>
+                            <option value="Seed">Seed</option>
+                            <option value="Series A">Series A</option>
+                            <option value="Series B">Series B</option>
+                            <option value="Series C+">Series C+</option>
+                            <option value="Bootstrapped">Bootstrapped</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description" class="form-label">What does your startup do? (1-2 sentences)</label>
+                        <textarea id="description" class="form-textarea" required placeholder="Describe your startup's mission and product"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">What are you looking for? (Select all that apply)</label>
+                        <div class="form-checkboxes">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="looking-investors" name="looking-for" value="Investors">
+                                <label for="looking-investors">Investors</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="looking-talent" name="looking-for" value="Talent">
+                                <label for="looking-talent">Talent</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="looking-partners" name="looking-for" value="Partners">
+                                <label for="looking-partners">Partners</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="looking-clients" name="looking-for" value="Clients">
+                                <label for="looking-clients">Clients</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="looking-mentors" name="looking-for" value="Mentors">
+                                <label for="looking-mentors">Mentors</label>
                             </div>
                         </div>
-                        <p class="startup-desc">Borderless business banking for startups with multi-currency accounts and corporate cards.</p>
-                        <div class="startup-looking">
-                            <p class="looking-title">Currently seeking</p>
-                            <div class="looking-item">Banking partners in SEA</div>
-                            <div class="looking-item">Enterprise clients</div>
-                            <div class="looking-item">Growth marketers</div>
-                        </div>
                     </div>
                     
-                    <!-- Startup 2 -->
-                    <div class="startup-card">
-                        <div class="startup-header">
-                            <div class="startup-logo">BO</div>
-                            <div>
-                                <h3 class="startup-name">Bowtie</h3>
-                                <p class="startup-meta">Insurtech • Series C</p>
-                            </div>
-                        </div>
-                        <p class="startup-desc">Hong Kong's first virtual insurer offering AI-powered health and life insurance.</p>
-                        <div class="startup-looking">
-                            <p class="looking-title">Currently seeking</p>
-                            <div class="looking-item">Hospital partnerships</div>
-                            <div class="looking-item">Actuarial talent</div>
-                            <div class="looking-item">Enterprise sales leads</div>
-                        </div>
+                    <div class="form-group">
+                        <label for="website" class="form-label">Website URL</label>
+                        <input type="url" id="website" class="form-input" placeholder="https://yourstartup.com">
                     </div>
                     
-                    <!-- Startup 3 -->
-                    <div class="startup-card">
-                        <div class="startup-header">
-                            <div class="startup-logo">DA</div>
-                            <div>
-                                <h3 class="startup-name">Dayta AI</h3>
-                                <p class="startup-meta">Retail Tech • Seed</p>
-                            </div>
-                        </div>
-                        <p class="startup-desc">Computer vision solutions that help retailers optimize store layouts and inventory.</p>
-                        <div class="startup-looking">
-                            <p class="looking-title">Currently seeking</p>
-                            <div class="looking-item">Pilot projects</div>
-                            <div class="looking-item">Data scientists</div>
-                            <div class="looking-item">Seed funding</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section class="benefits">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Why Founders List With Us</h2>
-                    <p class="section-subtitle">Designed specifically for startup needs</p>
-                </div>
-                
-                <div class="benefits-grid">
-                    <div class="benefit-card">
-                        <div class="benefit-icon">👁️</div>
-                        <h3 class="benefit-title">Targeted Visibility</h3>
-                        <p class="benefit-desc">Get in front of exactly who matters—corporate innovation teams, potential partners, and industry-specific investors.</p>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Contact Email</label>
+                        <input type="email" id="email" class="form-input" required placeholder="you@yourstartup.com">
                     </div>
                     
-                    <div class="benefit-card">
-                        <div class="benefit-icon">✨</div>
-                        <h3 class="benefit-title">Showcase Your Needs</h3>
-                        <p class="benefit-desc">Highlight what you're looking for (partners, talent, clients) so the right people can reach out directly.</p>
-                    </div>
+                    <button type="submit" class="submit-btn">Submit Your Startup</button>
                     
-                    <div class="benefit-card">
-                        <div class="benefit-icon">🚀</div>
-                        <h3 class="benefit-title">Zero Commission</h3>
-                        <p class="benefit-desc">We don't take cuts from connections made. Just pure visibility for your startup.</p>
+                    <div id="success-message" class="success-message">
+                        <i class="fas fa-check-circle"></i> Thank you for your submission! Your startup has been added to our directory.
                     </div>
-                </div>
-            </div>
-        </section>
-        
-        <section class="cta-section" id="submit">
-            <div class="container">
-                <div class="cta-box">
-                    <h2 class="cta-title">Ready to get discovered?</h2>
-                    <p class="cta-subtitle">Join Hong Kong's most founder-friendly startup directory</p>
-                    <a href="mailto:list@hkstartuppulse.com?subject=Startup%20Submission&body=Startup%20Name:%0A%0AIndustry:%0A%0AWhat%20you%20do%20(1-2%20sentences):%0A%0AWhat%20you're%20looking%20for:%0A-%20%0A-%20%0A-%20%0A%0AWebsite:%0A%0AContact%20Email:" 
-                       class="cta-button">
-                       Submit Your Startup
-                    </a>
-                </div>
+                </form>
             </div>
         </section>
     </main>
@@ -486,12 +623,246 @@
             <div class="footer-logo">HK Startup Pulse</div>
             <p>Connecting Hong Kong's startup ecosystem</p>
             <div class="footer-links">
-                <a href="#" class="footer-link">For Startups</a>
-                <a href="#" class="footer-link">About</a>
+                <a href="#featured" class="footer-link">Featured Startups</a>
+                <a href="#directory" class="footer-link">Directory</a>
+                <a href="#submit" class="footer-link">Submit</a>
                 <a href="mailto:hello@hkstartuppulse.com" class="footer-link">Contact</a>
             </div>
             <p style="margin-top: 2rem; opacity: 0.7; font-size: 0.9rem;">© 2023 HK Startup Pulse</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample data for initial startups
+            const sampleStartups = [
+                {
+                    id: 1,
+                    name: "Neat",
+                    industry: "Fintech",
+                    stage: "Series B",
+                    description: "Borderless business banking for startups with multi-currency accounts and corporate cards.",
+                    lookingFor: ["Banking partners in SEA", "Enterprise clients", "Growth marketers"],
+                    logoText: "NE",
+                    featured: true
+                },
+                {
+                    id: 2,
+                    name: "Bowtie",
+                    industry: "Insurtech",
+                    stage: "Series C",
+                    description: "Hong Kong's first virtual insurer offering AI-powered health and life insurance.",
+                    lookingFor: ["Hospital partnerships", "Actuarial talent", "Enterprise sales leads"],
+                    logoText: "BO",
+                    featured: true
+                },
+                {
+                    id: 3,
+                    name: "Dayta AI",
+                    industry: "Retail Tech",
+                    stage: "Seed",
+                    description: "Computer vision solutions that help retailers optimize store layouts and inventory.",
+                    lookingFor: ["Pilot projects", "Data scientists", "Seed funding"],
+                    logoText: "DA",
+                    featured: true
+                }
+            ];
+
+            // Initialize startups in local storage if not already set
+            if (!localStorage.getItem('startups')) {
+                localStorage.setItem('startups', JSON.stringify(sampleStartups));
+            }
+
+            // DOM elements
+            const form = document.getElementById('startup-form');
+            const successMessage = document.getElementById('success-message');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const featuredContainer = document.getElementById('featured-startups');
+            const directoryContainer = document.getElementById('all-startups');
+
+            // Load startups from local storage
+            function loadStartups() {
+                const startups = JSON.parse(localStorage.getItem('startups')) || [];
+                
+                // Clear containers
+                featuredContainer.innerHTML = '';
+                directoryContainer.innerHTML = '';
+                
+                if (startups.length === 0) {
+                    featuredContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-building"></i>
+                            <h3>No startups yet</h3>
+                            <p>Be the first to submit your startup to our directory!</p>
+                            <button class="submit-btn" style="width: auto; display: inline-block;" onclick="showTab('submit')">Submit Your Startup</button>
+                        </div>
+                    `;
+                    directoryContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-building"></i>
+                            <h3>No startups yet</h3>
+                            <p>Be the first to submit your startup to our directory!</p>
+                            <button class="submit-btn" style="width: auto; display: inline-block;" onclick="showTab('submit')">Submit Your Startup</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Render featured startups
+                const featuredStartups = startups.filter(startup => startup.featured);
+                if (featuredStartups.length > 0) {
+                    featuredStartups.forEach(startup => {
+                        featuredContainer.appendChild(createStartupCard(startup));
+                    });
+                } else {
+                    featuredContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <h3>No featured startups</h3>
+                            <p>There are no featured startups at the moment.</p>
+                        </div>
+                    `;
+                }
+                
+                // Render all startups
+                startups.forEach(startup => {
+                    directoryContainer.appendChild(createStartupCard(startup));
+                });
+            }
+
+            // Create startup card HTML
+            function createStartupCard(startup) {
+                const card = document.createElement('div');
+                card.className = 'startup-card';
+                card.innerHTML = `
+                    <button class="delete-btn" data-id="${startup.id}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="startup-header">
+                        <div class="startup-logo">${startup.logoText || startup.name.substring(0, 2).toUpperCase()}</div>
+                        <div>
+                            <h3 class="startup-name">${startup.name}</h3>
+                            <p class="startup-meta">${startup.industry} • ${startup.stage}</p>
+                        </div>
+                    </div>
+                    <p class="startup-desc">${startup.description}</p>
+                    <div class="startup-looking">
+                        <p class="looking-title">Currently seeking</p>
+                        ${startup.lookingFor.map(item => `<div class="looking-item">${item}</div>`).join('')}
+                    </div>
+                    ${startup.website ? `<p style="margin-top: 1rem;"><strong>Website:</strong> <a href="${startup.website}" target="_blank">${startup.website}</a></p>` : ''}
+                    ${startup.email ? `<p><strong>Contact:</strong> ${startup.email}</p>` : ''}
+                `;
+                
+                // Add delete functionality
+                const deleteBtn = card.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to remove this startup?')) {
+                        deleteStartup(startup.id);
+                    }
+                });
+                
+                return card;
+            }
+
+            // Delete a startup
+            function deleteStartup(id) {
+                let startups = JSON.parse(localStorage.getItem('startups')) || [];
+                startups = startups.filter(startup => startup.id !== id);
+                localStorage.setItem('startups', JSON.stringify(startups));
+                loadStartups();
+            }
+
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('startup-name').value;
+                const industry = document.getElementById('industry').value;
+                const stage = document.getElementById('stage').value;
+                const description = document.getElementById('description').value;
+                const website = document.getElementById('website').value;
+                const email = document.getElementById('email').value;
+                
+                // Get checked values for "looking for"
+                const lookingFor = [];
+                document.querySelectorAll('input[name="looking-for"]:checked').forEach(checkbox => {
+                    lookingFor.push(checkbox.value);
+                });
+                
+                // Add custom looking for items
+                const customLooking = document.getElementById('custom-looking').value;
+                if (customLooking) {
+                    customLooking.split(',').forEach(item => {
+                        const trimmed = item.trim();
+                        if (trimmed) lookingFor.push(trimmed);
+                    });
+                }
+                
+                // Create new startup object
+                const newStartup = {
+                    id: Date.now(), // Use timestamp as ID
+                    name,
+                    industry,
+                    stage,
+                    description,
+                    lookingFor,
+                    website,
+                    email,
+                    logoText: name.substring(0, 2).toUpperCase(),
+                    featured: false
+                };
+                
+                // Save to local storage
+                const startups = JSON.parse(localStorage.getItem('startups')) || [];
+                startups.push(newStartup);
+                localStorage.setItem('startups', JSON.stringify(startups));
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                form.reset();
+                
+                // Reload startups
+                loadStartups();
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Hide success message after 5 seconds
+                setTimeout(function() {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            });
+
+            // Tab functionality
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active tab content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Global function to show specific tab
+            window.showTab = function(tabId) {
+                tabButtons.forEach(btn => {
+                    if (btn.getAttribute('data-tab') === tabId) {
+                        btn.click();
+                    }
+                });
+            };
+
+            // Initial load
+            loadStartups();
+        });
+    </script>
 </body>
 </html>
