@@ -448,8 +448,8 @@ function renderCard(s){
   const site = normalizeUrl(s.Website);
 
   // Flexible field names for new data
-  const services = splitCSV(s.Services || s['Services Provided'] || s['Service'] || '');
-  const lookingFor = splitCSV(s.LookingFor || s['Looking For'] || s['Seeking'] || '');
+  const services = splitCSV(s.Services || s['Services'] || s['Service'] || '');
+  const lookingFor = splitCSV(s.LookingFor || s['LookingFor'] || s['Seeking'] || '');
 
   const email = s.Email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.Email) ? s.Email : '';
 
