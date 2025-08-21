@@ -495,7 +495,7 @@ async function loadDirectory(){
   if (prevEl) prevEl.innerHTML = '';
 
   try{
-    const res = await fetch(SCRIPT_URL, { cache: 'no-store' });
+    const res = await fetch('https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec', { cache: 'no-store' });
     const data = await res.json();
 
     const entries = (Array.isArray(data) ? data : []).filter(x => x && x.Company);
@@ -536,8 +536,7 @@ if (form){
 
     const payload = Object.fromEntries(new FormData(form).entries());
     try{
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
+      const res = await fetch('https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec';
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
