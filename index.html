@@ -55,7 +55,7 @@ section{padding:72px 0}
 .grid.cols-2{grid-template-columns:repeat(2,1fr)}
 
 /* Cards */
-.startup-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.startup-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;display:flex;flex-direction:column}
 .startup-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:#d9dbe1}
 .logo-wrap{width:40px;height:40px;border-radius:9px;display:grid;place-items:center;font-weight:700;color:#fff}
 .tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#0f172a;background:#eef2ff;padding:6px 10px;border-radius:999px;font-weight:600}
@@ -64,6 +64,16 @@ section{padding:72px 0}
 .card-desc{color:var(--muted);font-size:14px;margin-bottom:10px}
 .card-link{color:var(--accent);font-weight:600;font-size:14px}
 .card-link:hover{text-decoration:underline}
+
+/* New: services + looking-for + footer */
+.services-list{list-style:none;padding:0;margin:8px 0;font-size:14px;color:var(--muted)}
+.services-list li{display:flex;align-items:flex-start;gap:6px}
+.services-list li::before{content:"•";color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-size:12px;font-weight:600;padding:4px 8px;border-radius:999px;background:var(--accent-50);color:var(--accent)}
+.card-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.meta-small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-footer .btn{padding:8px 12px;font-size:14px}
 
 /* Value props */
 .value-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:flex-start}
@@ -278,64 +288,64 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
       <h2 class="section-title">Get listed today</h2>
       <p class="section-sub">Tell us a little about your startup. We’ll add it to the live directory instantly.</p>
 
-      <div class="cta" role="form">
-        <form id="startup-form" novalidate>
-          <div>
-            <label for="name">Your name</label>
-            <input id="name" name="Name" type="text" placeholder="E.g., Spooki Chan" required />
-          </div>
-          <div>
-            <label for="email">Work email</label>
-            <input id="email" name="Email" type="email" inputmode="email" placeholder="you@startup.hk" required />
-          </div>
+    <div class="cta" role="form">
+      <form id="startup-form" novalidate>
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="Name" type="text" placeholder="E.g., Spooki Chan" required />
+        </div>
+        <div>
+          <label for="email">Work email</label>
+          <input id="email" name="Email" type="email" inputmode="email" placeholder="you@startup.hk" required />
+        </div>
 
-          <div>
-            <label for="company">Company name</label>
-            <input id="company" name="Company" type="text" placeholder="Your startup" required />
-          </div>
-          <div>
-            <label for="website">Website</label>
-            <input id="website" name="Website" type="url" inputmode="url" placeholder="https://yourstartup.hk" />
-          </div>
+        <div>
+          <label for="company">Company name</label>
+          <input id="company" name="Company" type="text" placeholder="Your startup" required />
+        </div>
+        <div>
+          <label for="website">Website</label>
+          <input id="website" name="Website" type="url" inputmode="url" placeholder="https://yourstartup.hk" />
+        </div>
 
-          <div>
-            <label for="role">Your role</label>
-            <select id="role" name="Role" required>
-              <option value="">Select role</option>
-              <option>Founder</option>
-              <option>Co-founder</option>
-              <option>Ops</option>
-              <option>Marketing</option>
-              <option>Engineering</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div>
-            <label for="sector">Sector</label>
-            <select id="sector" name="Sector" required>
-              <option value="">Select sector</option>
-              <option>Fintech</option>
-              <option>AI</option>
-              <option>SaaS</option>
-              <option>Health</option>
-              <option>Climate</option>
-              <option>Mobility</option>
-              <option>Other</option>
-            </select>
-          </div>
+        <div>
+          <label for="role">Your role</label>
+          <select id="role" name="Role" required>
+            <option value="">Select role</option>
+            <option>Founder</option>
+            <option>Co-founder</option>
+            <option>Ops</option>
+            <option>Marketing</option>
+            <option>Engineering</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="sector">Sector</label>
+          <select id="sector" name="Sector" required>
+            <option value="">Select sector</option>
+            <option>Fintech</option>
+            <option>AI</option>
+            <option>SaaS</option>
+            <option>Health</option>
+            <option>Climate</option>
+            <option>Mobility</option>
+            <option>Other</option>
+          </select>
+        </div>
 
-          <div class="full">
-            <label for="desc">One-line description</label>
-            <input id="desc" name="Description" type="text" maxlength="140" placeholder="What do you do in one sentence?" required />
-            <div class="help">Keep it simple and specific. 140 characters max.</div>
-          </div>
+        <div class="full">
+          <label for="desc">One-line description</label>
+          <input id="desc" name="Description" type="text" maxlength="140" placeholder="What do you do in one sentence?" required />
+          <div class="help">Keep it simple and specific. 140 characters max.</div>
+        </div>
 
-          <div class="full" style="display:flex;gap:10px;align-items:center">
-            <button type="submit" class="btn btn-primary">Submit application</button>
-            <span id="status" role="status" aria-live="polite"></span>
-          </div>
-        </form>
-      </div>
+        <div class="full" style="display:flex;gap:10px;align-items:center">
+          <button type="submit" class="btn btn-primary">Submit application</button>
+          <span id="status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
     </div>
   </section>
 
@@ -418,109 +428,42 @@ function colorFromString(str='HK'){
   const hue = Math.abs(hash)%360;
   return `hsl(${hue} 80% 45%)`;
 }
+function normalizeUrl(url){
+  if (!url) return '';
+  try {
+    return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  } catch { return ''; }
+}
+function splitCSV(val){
+  if (!val) return [];
+  return String(val).split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
+}
 
-// Render a startup card
+// Render a startup card (enhanced)
 function renderCard(s){
   const logoBg = colorFromString(s.Company || s.Name || 'HK');
   const letter = initials(s.Company || s.Name || 'HK');
   const safeDesc = s.Description ? s.Description : '';
   const safeSector = s.Sector ? s.Sector : 'Startup';
-  const site = s.Website && /^https?:\/\//i.test(s.Website) ? s.Website : (s.Website ? `https://${s.Website}` : '');
+  const site = normalizeUrl(s.Website);
+
+  // Flexible field names for new data
+  const services = splitCSV(s.Services || s['Services Provided'] || s['Service'] || '');
+  const lookingFor = splitCSV(s.LookingFor || s['Looking For'] || s['Seeking'] || '');
+
+  const email = s.Email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.Email) ? s.Email : '';
+
   return `
     <article class="startup-card" aria-label="${s.Company || 'Startup'}">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="logo-wrap" style="background:${logoBg}">${letter}</div>
         <span class="tag">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12l7-7h8l3 3v8l-7 7-11-11zM16 8a2 2 0 110 4 2 2 0 010-4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="14" height="14"><path d="M3 12l7-7h8l3 3v8l-7 7-11-11zM16 8a2 2 0 110 4 2 2 0 010-4z"/></svg>
           ${safeSector}
         </span>
       </div>
+
       <h3 class="card-title">${s.Company || 'Untitled'}</h3>
       <p class="card-desc">${safeDesc}</p>
-      ${site ? `<a class="card-link" href="${site}" target="_blank" rel="noopener noreferrer">Visit site →</a>` : ``}
-    </article>
-  `;
-}
 
-// Fetch directory and render
-async function loadDirectory(){
-  const listEl = document.getElementById('directory-list');
-  const prevEl = document.getElementById('directory-preview');
-  listEl.textContent = 'Loading...';
-  if (prevEl) prevEl.innerHTML = '';
-
-  try{
-    const res = await fetch(SCRIPT_URL, { cache: 'no-store' });
-    const data = await res.json();
-
-    // Normalize: ensure it’s an array of objects with Company
-    const entries = (Array.isArray(data) ? data : []).filter(x => x && x.Company);
-
-    // Render full list
-    listEl.innerHTML = entries.length
-      ? entries.slice().reverse().map(renderCard).join('')
-      : '<p class="card-desc">No startups yet. Be the first to submit!</p>';
-
-    // Render preview (latest 6)
-    if (prevEl){
-      prevEl.innerHTML = entries.slice(-6).reverse().map(renderCard).join('');
-    }
-  }catch(err){
-    console.error('Directory load error', err);
-    listEl.innerHTML = '<p class="card-desc">Error loading directory. Please refresh.</p>';
-  }
-}
-
-// Handle form submit
-const form = document.getElementById('startup-form');
-const statusEl = document.getElementById('status');
-
-if (form){
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    statusEl.style.color = '';
-    statusEl.textContent = 'Submitting...';
-
-    // Basic client validation
-    const requiredIds = ['name','email','company','role','sector','desc'];
-    const invalid = requiredIds.filter(id => {
-      const el = document.getElementById(id);
-      return !el || !el.value || (el.type==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value));
-    });
-    if (invalid.length){
-      statusEl.style.color = '#e11d48';
-      statusEl.textContent = 'Please complete the required fields.';
-      return;
-    }
-
-    const payload = Object.fromEntries(new FormData(form).entries());
-    try{
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const result = await res.json();
-      if (result && result.status === 'success'){
-        statusEl.style.color = '#059669';
-        statusEl.textContent = 'Thanks! Your startup is now live.';
-        form.reset();
-        loadDirectory();
-        // Smooth scroll to directory
-        document.getElementById('directory').scrollIntoView({behavior:'smooth'});
-      }else{
-        throw new Error('Submission failed');
-      }
-    }catch(err){
-      console.error('Submit error', err);
-      statusEl.style.color = '#e11d48';
-      statusEl.textContent = 'Error submitting form. Please try again in a moment.';
-    }
-  });
-}
-
-// Init
-document.addEventListener('DOMContentLoaded', loadDirectory);
-</script>
-</body>
-</html>
+      ${services.length ? `<ul class="services-list">${services.map(item => `<li>${item}</li>`).join('')}
