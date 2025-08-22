@@ -447,266 +447,124 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
 </footer>
 
 <script>
-// Google Apps Script Web App URL (live)
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec';
-
-// Use Netlify Forms instead of Google Apps Script for form handling
 const USE_NETLIFY_FORMS = true;
-
-// Mock mode for testing without backend
-const MOCK_MODE = false; // Set to true to test without backend
-const MOCK_DATA = [
-  {
-    company: "TechHub HK",
-    name: "Alex Wong",
-    email: "alex@techhub.hk",
-    role: "Founder",
-    sector: "SaaS",
-    description: "All-in-one workspace for remote teams",
-    services: "Project management, Team chat, File sharing",
-    lookingFor: "Investors, Beta testers",
-    website: "https://techhub.hk"
-  },
-  {
-    company: "GreenFinance",
-    name: "Michelle Li",
-    email: "michelle@greenfinance.hk",
-    role: "CEO",
-    sector: "Fintech",
-    description: "Sustainable investing platform for Asia",
-    services: "ESG scoring, Portfolio management, Impact reporting",
-    lookingFor: "Partners, Regulatory advisors",
-    website: "https://greenfinance.hk"
-  },
-  {
-    company: "MediAI",
-    name: "Dr. James Chen",
-    email: "james@mediai.hk",
-    role: "CTO",
-    sector: "Health",
-    description: "AI-powered diagnostics for medical imaging",
-    services: "Radiology AI, Health screening, Telemedicine",
-    lookingFor: "Hospital partners, Clinical trials",
-    website: "https://mediai.hk"
-  }
-];
+const MOCK_MODE = false;
 
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // Utilities
-function initials(name='?'){
-  const parts = String(name).trim().split(/\s+/);
-  const first = parts[0]?.[0] || '?';
-  const last = parts[1]?.[0] || '';
-  return (first + last).toUpperCase().slice(0,2);
-}
-function colorFromString(str='HK'){
-  let hash = 0;
-  for (let i=0; i<str.length; i++) hash = str.charCodeAt(i) + ((hash<<5)-hash);
-  const hue = Math.abs(hash)%360;
-  return `hsl(${hue} 80% 45%)`;
-}
-function normalizeUrl(url){
-  if (!url) return '';
-  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
-}
-function splitCSV(val){
-  if (!val) return [];
-  return String(val).split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
-}
+function initials(name='?'){ const parts = String(name).trim().split(/\s+/); return ((parts[0]?.[0]||'?') + (parts[1]?.[0]||'')).toUpperCase().slice(0,2); }
+function colorFromString(str='HK'){ let hash=0; for(let i=0;i<str.length;i++) hash=str.charCodeAt(i)+((hash<<5)-hash); return `hsl(${Math.abs(hash)%360} 80% 45%)`; }
+function normalizeUrl(url){ if(!url) return ''; return /^https?:\/\//i.test(url)?url:`https://${url}`; }
+function splitCSV(val){ if(!val) return []; return String(val).split(/[,;|]/).map(x=>x.trim()).filter(Boolean); }
 
-// Form validation
-function validateForm() {
-  let isValid = true;
-  
-  // Reset errors
-  document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-  
-  // Validate name
-  const name = document.getElementById('name');
-  if (!name.value.trim()) {
-    document.getElementById('name-error').textContent = 'Name is required';
-    name.classList.add('input-error');
-    isValid = false;
-  }
-  
-  // Validate email
-  const email = document.getElementById('email');
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email.value.trim() || !emailRegex.test(email.value)) {
-    document.getElementById('email-error').textContent = 'Valid email is required';
-    email.classList.add('input-error');
-    isValid = false;
-  }
-  
-  // Validate company
-  const company = document.getElementById('company');
-  if (!company.value.trim()) {
-    document.getElementById('company-error').textContent = 'Company name is required';
-    company.classList.add('input-error');
-    isValid = false;
-  }
-  
-  // Validate role
-  const role = document.getElementById('role');
-  if (!role.value) {
-    document.getElementById('role-error').textContent = 'Please select your role';
-    role.classList.add('input-error');
-    isValid = false;
-  }
-  
-  // Validate sector
-  const sector = document.getElementById('sector');
-  if (!sector.value) {
-    document.getElementById('sector-error').textContent = 'Please select a sector';
-    sector.classList.add('input-error');
-    isValid = false;
-  }
-  
-  // Validate description
-  const desc = document.getElementById('desc');
-  if (!desc.value.trim()) {
-    document.getElementById('desc-error').textContent = 'Description is required';
-    desc.classList.add('input-error');
-    isValid = false;
-  } else if (desc.value.length > 140) {
-    document.getElementById('desc-error').textContent = 'Description must be 140 characters or less';
-    desc.classList.add('input-error');
-    isValid = false;
-  }
-  
+// Validation
+function validateForm(){
+  let isValid=true;
+  document.querySelectorAll('.error-message').forEach(el=>el.textContent='');
+  document.querySelectorAll('.input-error').forEach(el=>el.classList.remove('input-error'));
+  const name=document.getElementById('name');
+  if(!name.value.trim()){document.getElementById('name-error').textContent='Name is required';name.classList.add('input-error');isValid=false;}
+  const email=document.getElementById('email');
+  const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!email.value.trim()||!emailRegex.test(email.value)){document.getElementById('email-error').textContent='Valid email is required';email.classList.add('input-error');isValid=false;}
+  const company=document.getElementById('company');
+  if(!company.value.trim()){document.getElementById('company-error').textContent='Company name is required';company.classList.add('input-error');isValid=false;}
+  const role=document.getElementById('role');
+  if(!role.value){document.getElementById('role-error').textContent='Please select your role';role.classList.add('input-error');isValid=false;}
+  const sector=document.getElementById('sector');
+  if(!sector.value){document.getElementById('sector-error').textContent='Please select a sector';sector.classList.add('input-error');isValid=false;}
+  const desc=document.getElementById('desc');
+  if(!desc.value.trim()){document.getElementById('desc-error').textContent='Description is required';desc.classList.add('input-error');isValid=false;}
+  else if(desc.value.length>140){document.getElementById('desc-error').textContent='Description must be 140 characters or less';desc.classList.add('input-error');isValid=false;}
   return isValid;
 }
 
-// Enhanced card renderer
+// Render card
 function renderCard(s){
-  const logoBg = colorFromString(s.company || s.name || 'HK');
-  const letter = initials(s.company || s.name || 'HK');
-  const safeDesc = s.description || '';
-  const safeSector = s.sector || 'Startup';
-  const site = normalizeUrl(s.website);
-  const services = splitCSV(s.services);
-  const lookingFor = splitCSV(s.lookingFor);
-  const email = (s.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email)) ? s.email : '';
-
-  return `
-    <article class="startup-card" aria-label="${s.company || 'Startup'}">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="logo-wrap" style="background:${logoBg}">${letter}</div>
-        <span class="tag">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="14" height="14"><path d="M3 12l7-7h8l3 3v8l-7 7-11-11zM16 8a2 2 0 110 4 2 2 0 010-4z"/></svg>
-          ${safeSector}
-        </span>
-      </div>
-
-      <h3 class="card-title">${s.company || 'Untitled'}</h3>
-      <p class="card-desc">${safeDesc}</p>
-
-      ${services.length ? `<ul class="services-list">${services.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
-
-      ${lookingFor.length ? `<div class="chips">${lookingFor.map(tag => `<span class="chip">${tag}</span>`).join('')}</div>` : ''}
-
-      ${site ? `<a class="card-link" href="${site}" target="_blank" rel="noopener noreferrer">Visit site →</a>` : ``}
-
-      <div class="card-footer">
-        <div class="meta-small">${s.name ? `${s.name}${s.role ? ` — ${s.role}` : ''}` : (s.role || '')}</div>
-        ${email ? `<a class="btn btn-primary" href="mailto:${email}">Contact</a>` : ''}
-      </div>
-    </article>
-  `;
+  const logoBg=colorFromString(s.company||s.name||'HK');
+  const letter=initials(s.company||s.name||'HK');
+  const safeDesc=s.description||'';
+  const safeSector=s.sector||'Startup';
+  const site=normalizeUrl(s.website);
+  const services=splitCSV(s.services);
+  const lookingFor=splitCSV(s.lookingFor);
+  const email=(s.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email))?s.email:'';
+  return `<article class="startup-card" aria-label="${s.company||'Startup'}">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="logo-wrap" style="background:${logoBg}">${letter}</div>
+      <span class="tag"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M3 12l7-7h8l3 3v8l-7 7-11-11zM16 8a2 2 0 110 4 2 2 0 010-4z"/></svg>${safeSector}</span>
+    </div>
+    <h3 class="card-title">${s.company||'Untitled'}</h3>
+    <p class="card-desc">${safeDesc}</p>
+    ${services.length?`<ul class="services-list">${services.map(item=>`<li>${item}</li>`).join('')}</ul>`:''}
+    ${lookingFor.length?`<div class="chips">${lookingFor.map(tag=>`<span class="chip">${tag}</span>`).join('')}</div>`:''}
+    ${site?`<a class="card-link" href="${site}" target="_blank" rel="noopener noreferrer">Visit site →</a>`:''}
+    <div class="card-footer">
+      <div class="meta-small">${s.name?`${s.name}${s.role?` — ${s.role}`:''}`:(s.role||'')}</div>
+      ${email?`<a class="btn btn-primary" href="mailto:${email}">Contact</a>`:''}
+    </div>
+  </article>`;
 }
 
-// Fetch directory and render
+// Load directory
 async function loadDirectory(){
-  const listEl = document.getElementById('directory-list');
-  const prevEl = document.getElementById('directory-preview');
-  listEl.textContent = 'Loading...';
-  if (prevEl) prevEl.innerHTML = '';
-
+  const listEl=document.getElementById('directory-list');
+  const prevEl=document.getElementById('directory-preview');
+  listEl.textContent='Loading...';
+  if(prevEl) prevEl.innerHTML='';
   try{
-    let data;
-    if (MOCK_MODE) {
-      // Use mock data for testing
-      data = MOCK_DATA;
-    } else {
-      const res = await fetch(SCRIPT_URL, { cache: 'no-store' });
-      data = await res.json();
-    }
-
-    const entries = (Array.isArray(data) ? data : []).filter(x => x && x.company);
-
-    listEl.innerHTML = entries.length
-      ? entries.slice().reverse().map(renderCard).join('')
-      : '<p class="card-desc">No startups yet. Be the first to submit!</p>';
-
-    if (prevEl){
-      prevEl.innerHTML = entries.slice(-6).reverse().map(renderCard).join('');
-    }
+    const res=await fetch(SCRIPT_URL,{cache:'no-store'});
+    const data=await res.json();
+    const entries=(Array.isArray(data)?data:[]).filter(x=>x&&x.company);
+    listEl.innerHTML=entries.length?entries.slice().reverse().map(renderCard).join(''):'<p class="card-desc">No startups yet. Be the first to submit!</p>';
+    if(prevEl){prevEl.innerHTML=entries.slice(-6).reverse().map(renderCard).join('');}
   }catch(err){
-    console.error('Directory load error', err);
-    listEl.innerHTML = '<p class="card-desc">Error loading directory. Please refresh.</p>';
+    console.error('Directory load error',err);
+    listEl.innerHTML='<p class="card-desc">Error loading directory. Please refresh.</p>';
   }
 }
 
-// Handle form submit
-const form = document.getElementById('startup-form');
-const statusEl = document.getElementById('status');
-
-if (form){
-  form.addEventListener('submit', async (e)=>{
+// Submit handler
+const form=document.getElementById('startup-form');
+const statusEl=document.getElementById('status');
+if(form){
+  form.addEventListener('submit',async e=>{
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
-    statusEl.style.color = '';
-    statusEl.textContent = 'Submitting...';
-
-    const formData = new FormData(form);
-
-    try {
-      if (MOCK_MODE) {
-        // Simulate successful submission in mock mode
-        await new Promise(resolve => setTimeout(resolve, 800));
-      } else if (USE_NETLIFY_FORMS) {
-        // Submit to Netlify Forms using URL-encoded body so Netlify captures it
-        await fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(formData).toString()
+    if(!validateForm()) return;
+    statusEl.style.color=''; statusEl.textContent='Submitting...';
+    const formData=new FormData(form);
+    try{
+      if(USE_NETLIFY_FORMS){
+        // Send to Netlify
+        await fetch("/",{
+          method:"POST",
+          headers:{"Content-Type":"application/x-www-form-urlencoded"},
+          body:new URLSearchParams(formData).toString()
         });
-      } else {
-        // Fallback: submit to Google Apps Script
-        const payload = Object.fromEntries(formData.entries());
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        if (!(result && result.status === 'success')) {
-          throw new Error('Submission failed');
-        }
       }
-
-      statusEl.style.color = '#059669';
-      statusEl.textContent = 'Thanks! Your startup is now live.';
+      // Also send to Google Apps Script so directory updates
+      await fetch(SCRIPT_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(Object.fromEntries(formData.entries()))
+      });
+      statusEl.style.color='#059669';
+      statusEl.textContent='Thanks! Your startup is now live.';
       form.reset();
       loadDirectory();
       document.getElementById('directory').scrollIntoView({behavior:'smooth'});
     }catch(err){
-      console.error('Submit error', err);
-      statusEl.style.color = '#e11d48';
-      statusEl.textContent = 'Error submitting form. Please try again in a moment.';
+      console.error('Submit error',err);
+      statusEl.style.color='#e11d48';
+      statusEl.textContent='Error submitting form. Please try again in a moment.';
     }
   });
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', loadDirectory);
+document.addEventListener('DOMContentLoaded',loadDirectory);
 </script>
 </body>
 </html>
