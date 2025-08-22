@@ -100,6 +100,8 @@ textarea{min-height:80px;resize:vertical}
 input:focus,select:focus,textarea:focus{border-color:#cbd5e1;box-shadow:0 0 0 4px rgba(230,0,46,.08)}
 .help{color:var(--muted);font-size:12px;margin-top:6px}
 #status{margin-top:6px;font-size:14px}
+.input-error{border-color: #e11d48 !important;}
+.error-message{color: #e11d48; font-size: 12px; margin-top: 4px;}
 
 /* Social proof */
 .logo-row{display:flex;flex-wrap:wrap;gap:24px;align-items:center;opacity:.8}
@@ -155,7 +157,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
           Hong Kong Startup Directory
         </div>
         <h1>Get discovered. Connect faster. Grow together.</h1>
-        <p class="subhead">Showcase what you’re building and let the right people find you — investors, partners, and talent across Hong Kong.</p>
+        <p class="subhead">Showcase what you're building and let the right people find you — investors, partners, and talent across Hong Kong.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#apply">Add your startup</a>
           <a class="btn btn-ghost" href="#directory">Explore startups</a>
@@ -287,26 +289,30 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
   <section id="apply" aria-label="Get listed form">
     <div class="container">
       <h2 class="section-title">Get listed today</h2>
-      <p class="section-sub">Tell us a little about your startup. We’ll add it to the live directory instantly.</p>
+      <p class="section-sub">Tell us a little about your startup. We'll add it to the live directory instantly.</p>
 
       <div class="cta" role="form">
         <form id="startup-form" novalidate>
           <div>
             <label for="name">Your name</label>
             <input id="name" name="Name" type="text" placeholder="E.g., Spooki Chan" required />
+            <div class="error-message" id="name-error"></div>
           </div>
           <div>
             <label for="email">Work email</label>
             <input id="email" name="Email" type="email" inputmode="email" placeholder="you@startup.hk" required />
+            <div class="error-message" id="email-error"></div>
           </div>
 
           <div>
             <label for="company">Company name</label>
             <input id="company" name="Company" type="text" placeholder="Your startup" required />
+            <div class="error-message" id="company-error"></div>
           </div>
           <div>
             <label for="website">Website</label>
             <input id="website" name="Website" type="url" inputmode="url" placeholder="https://yourstartup.hk" />
+            <div class="error-message" id="website-error"></div>
           </div>
 
           <div>
@@ -320,6 +326,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
               <option>Engineering</option>
               <option>Other</option>
             </select>
+            <div class="error-message" id="role-error"></div>
           </div>
           <div>
             <label for="sector">Sector</label>
@@ -333,12 +340,14 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
               <option>Mobility</option>
               <option>Other</option>
             </select>
+            <div class="error-message" id="sector-error"></div>
           </div>
 
           <div class="full">
             <label for="desc">One-line description</label>
             <input id="desc" name="Description" type="text" maxlength="140" placeholder="What do you do in one sentence?" required />
             <div class="help">Keep it simple and specific. 140 characters max.</div>
+            <div class="error-message" id="desc-error"></div>
           </div>
 
           <div class="full">
@@ -388,7 +397,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
       </div>
 
       <blockquote>
-        <p>Clean, fast, and actually useful — exactly what Hong Kong’s founders need.</p>
+        <p>Clean, fast, and actually useful — exactly what Hong Kong's founders need.</p>
         <cite>— Ada W., Community Lead at HarbourWorks</cite>
       </blockquote>
     </div>
@@ -424,6 +433,44 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
 // Google Apps Script Web App URL (live)
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec';
 
+// Mock mode for testing without backend
+const MOCK_MODE = false; // Set to true to test without backend
+const MOCK_DATA = [
+  {
+    Company: "TechHub HK",
+    Name: "Alex Wong",
+    Email: "alex@techhub.hk",
+    Role: "Founder",
+    Sector: "SaaS",
+    Description: "All-in-one workspace for remote teams",
+    Services: "Project management, Team chat, File sharing",
+    LookingFor: "Investors, Beta testers",
+    Website: "https://techhub.hk"
+  },
+  {
+    Company: "GreenFinance",
+    Name: "Michelle Li",
+    Email: "michelle@greenfinance.hk",
+    Role: "CEO",
+    Sector: "Fintech",
+    Description: "Sustainable investing platform for Asia",
+    Services: "ESG scoring, Portfolio management, Impact reporting",
+    LookingFor: "Partners, Regulatory advisors",
+    Website: "https://greenfinance.hk"
+  },
+  {
+    Company: "MediAI",
+    Name: "Dr. James Chen",
+    Email: "james@mediai.hk",
+    Role: "CTO",
+    Sector: "Health",
+    Description: "AI-powered diagnostics for medical imaging",
+    Services: "Radiology AI, Health screening, Telemedicine",
+    LookingFor: "Hospital partners, Clinical trials",
+    Website: "https://mediai.hk"
+  }
+];
+
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -447,6 +494,70 @@ function normalizeUrl(url){
 function splitCSV(val){
   if (!val) return [];
   return String(val).split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
+}
+
+// Form validation
+function validateForm() {
+  let isValid = true;
+  
+  // Reset errors
+  document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+  
+  // Validate name
+  const name = document.getElementById('name');
+  if (!name.value.trim()) {
+    document.getElementById('name-error').textContent = 'Name is required';
+    name.classList.add('input-error');
+    isValid = false;
+  }
+  
+  // Validate email
+  const email = document.getElementById('email');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email.value.trim() || !emailRegex.test(email.value)) {
+    document.getElementById('email-error').textContent = 'Valid email is required';
+    email.classList.add('input-error');
+    isValid = false;
+  }
+  
+  // Validate company
+  const company = document.getElementById('company');
+  if (!company.value.trim()) {
+    document.getElementById('company-error').textContent = 'Company name is required';
+    company.classList.add('input-error');
+    isValid = false;
+  }
+  
+  // Validate role
+  const role = document.getElementById('role');
+  if (!role.value) {
+    document.getElementById('role-error').textContent = 'Please select your role';
+    role.classList.add('input-error');
+    isValid = false;
+  }
+  
+  // Validate sector
+  const sector = document.getElementById('sector');
+  if (!sector.value) {
+    document.getElementById('sector-error').textContent = 'Please select a sector';
+    sector.classList.add('input-error');
+    isValid = false;
+  }
+  
+  // Validate description
+  const desc = document.getElementById('desc');
+  if (!desc.value.trim()) {
+    document.getElementById('desc-error').textContent = 'Description is required';
+    desc.classList.add('input-error');
+    isValid = false;
+  } else if (desc.value.length > 140) {
+    document.getElementById('desc-error').textContent = 'Description must be 140 characters or less';
+    desc.classList.add('input-error');
+    isValid = false;
+  }
+  
+  return isValid;
 }
 
 // Enhanced card renderer
@@ -495,8 +606,14 @@ async function loadDirectory(){
   if (prevEl) prevEl.innerHTML = '';
 
   try{
-    const res = await fetch('https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec', { cache: 'no-store' });
-    const data = await res.json();
+    let data;
+    if (MOCK_MODE) {
+      // Use mock data for testing
+      data = MOCK_DATA;
+    } else {
+      const res = await fetch(SCRIPT_URL, { cache: 'no-store' });
+      data = await res.json();
+    }
 
     const entries = (Array.isArray(data) ? data : []).filter(x => x && x.Company);
 
@@ -520,28 +637,32 @@ const statusEl = document.getElementById('status');
 if (form){
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     statusEl.style.color = '';
     statusEl.textContent = 'Submitting...';
 
-    const requiredIds = ['name','email','company','role','sector','desc'];
-    const invalid = requiredIds.filter(id => {
-      const el = document.getElementById(id);
-      return !el || !el.value || (el.type==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value));
-    });
-    if (invalid.length){
-      statusEl.style.color = '#e11d48';
-      statusEl.textContent = 'Please complete the required fields.';
-      return;
-    }
-
     const payload = Object.fromEntries(new FormData(form).entries());
-    try{
-     const res = await fetch('https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-      const result = await res.json();
+    
+    try {
+      let result;
+      
+      if (MOCK_MODE) {
+        // Simulate successful submission in mock mode
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        result = { status: 'success' };
+      } else {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        result = await res.json();
+      }
+      
       if (result && result.status === 'success'){
         statusEl.style.color = '#059669';
         statusEl.textContent = 'Thanks! Your startup is now live.';
@@ -564,4 +685,3 @@ document.addEventListener('DOMContentLoaded', loadDirectory);
 </script>
 </body>
 </html>
-```
