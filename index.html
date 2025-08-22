@@ -665,40 +665,38 @@ if (form){
     statusEl.style.color = '';
     statusEl.textContent = 'Submitting...';
 
-    const payload = Object.fromEntries(new FormData(form).entries());
-    
+    const formData = new FormData(form);
+
     try {
-      let result;
-      
       if (MOCK_MODE) {
         // Simulate successful submission in mock mode
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        result = { status: 'success' };
+        await new Promise(resolve => setTimeout(resolve, 800));
       } else if (USE_NETLIFY_FORMS) {
-        // Use Netlify Forms for submission
-        // The form will be handled by Netlify automatically
-        // We just need to show success and reset the form
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        result = { status: 'success' };
+        // Submit to Netlify Forms using URL-encoded body so Netlify captures it
+        await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(formData).toString()
+        });
       } else {
-        // Use Google Apps Script for submission
+        // Fallback: submit to Google Apps Script
+        const payload = Object.fromEntries(formData.entries());
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        result = await res.json();
+        const result = await res.json();
+        if (!(result && result.status === 'success')) {
+          throw new Error('Submission failed');
+        }
       }
-      
-      if (result && result.status === 'success'){
-        statusEl.style.color = '#059669';
-        statusEl.textContent = 'Thanks! Your startup is now live.';
-        form.reset();
-        loadDirectory();
-        document.getElementById('directory').scrollIntoView({behavior:'smooth'});
-      }else{
-        throw new Error('Submission failed');
-      }
+
+      statusEl.style.color = '#059669';
+      statusEl.textContent = 'Thanks! Your startup is now live.';
+      form.reset();
+      loadDirectory();
+      document.getElementById('directory').scrollIntoView({behavior:'smooth'});
     }catch(err){
       console.error('Submit error', err);
       statusEl.style.color = '#e11d48';
@@ -712,3 +710,4 @@ document.addEventListener('DOMContentLoaded', loadDirectory);
 </script>
 </body>
 </html>
+```
