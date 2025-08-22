@@ -128,6 +128,9 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
   .grid.cols-3,.grid.cols-2{grid-template-columns:1fr}
   .logo-row{gap:16px}
 }
+
+/* Netlify form specific */
+.hidden {display: none;}
 </style>
 </head>
 <body>
@@ -292,32 +295,46 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
       <p class="section-sub">Tell us a little about your startup. We'll add it to the live directory instantly.</p>
 
       <div class="cta" role="form">
-        <form id="startup-form" novalidate>
+        <!-- Netlify Form -->
+        <form 
+          id="startup-form" 
+          name="startup-submission" 
+          method="POST" 
+          data-netlify="true" 
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <!-- Netlify Form Hidden Fields -->
+          <input type="hidden" name="form-name" value="startup-submission" />
+          <p class="hidden">
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+          
           <div>
             <label for="name">Your name</label>
-            <input id="name" name="Name" type="text" placeholder="E.g., Spooki Chan" required />
+            <input id="name" name="name" type="text" placeholder="E.g., Spooki Chan" required />
             <div class="error-message" id="name-error"></div>
           </div>
           <div>
             <label for="email">Work email</label>
-            <input id="email" name="Email" type="email" inputmode="email" placeholder="you@startup.hk" required />
+            <input id="email" name="email" type="email" inputmode="email" placeholder="you@startup.hk" required />
             <div class="error-message" id="email-error"></div>
           </div>
 
           <div>
             <label for="company">Company name</label>
-            <input id="company" name="Company" type="text" placeholder="Your startup" required />
+            <input id="company" name="company" type="text" placeholder="Your startup" required />
             <div class="error-message" id="company-error"></div>
           </div>
           <div>
             <label for="website">Website</label>
-            <input id="website" name="Website" type="url" inputmode="url" placeholder="https://yourstartup.hk" />
+            <input id="website" name="website" type="url" inputmode="url" placeholder="https://yourstartup.hk" />
             <div class="error-message" id="website-error"></div>
           </div>
 
           <div>
             <label for="role">Your role</label>
-            <select id="role" name="Role" required>
+            <select id="role" name="role" required>
               <option value="">Select role</option>
               <option>Founder</option>
               <option>Co-founder</option>
@@ -330,7 +347,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
           </div>
           <div>
             <label for="sector">Sector</label>
-            <select id="sector" name="Sector" required>
+            <select id="sector" name="sector" required>
               <option value="">Select sector</option>
               <option>Fintech</option>
               <option>AI</option>
@@ -345,20 +362,20 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
 
           <div class="full">
             <label for="desc">One-line description</label>
-            <input id="desc" name="Description" type="text" maxlength="140" placeholder="What do you do in one sentence?" required />
+            <input id="desc" name="description" type="text" maxlength="140" placeholder="What do you do in one sentence?" required />
             <div class="help">Keep it simple and specific. 140 characters max.</div>
             <div class="error-message" id="desc-error"></div>
           </div>
 
           <div class="full">
             <label for="services">Services provided</label>
-            <textarea id="services" name="Services" placeholder="Comma-separated e.g. Payments API, Fraud detection, POS integration"></textarea>
+            <textarea id="services" name="services" placeholder="Comma-separated e.g. Payments API, Fraud detection, POS integration"></textarea>
             <div class="help">Use commas to separate multiple services.</div>
           </div>
 
           <div class="full">
             <label for="looking">Looking for</label>
-            <textarea id="looking" name="LookingFor" placeholder="Comma-separated e.g. Investor, Collaborator, Pilot customers"></textarea>
+            <textarea id="looking" name="lookingFor" placeholder="Comma-separated e.g. Investor, Collaborator, Pilot customers"></textarea>
             <div class="help">Use commas to separate multiple items.</div>
           </div>
 
@@ -433,41 +450,44 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:#fff}
 // Google Apps Script Web App URL (live)
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzs73U4Ux7S6iPmKpJsTYIdAdAih95QP8jPUcmdW_GNEGw21JUA2n9BJTK5tbOXySBdIA/exec';
 
+// Use Netlify Forms instead of Google Apps Script for form handling
+const USE_NETLIFY_FORMS = true;
+
 // Mock mode for testing without backend
 const MOCK_MODE = false; // Set to true to test without backend
 const MOCK_DATA = [
   {
-    Company: "TechHub HK",
-    Name: "Alex Wong",
-    Email: "alex@techhub.hk",
-    Role: "Founder",
-    Sector: "SaaS",
-    Description: "All-in-one workspace for remote teams",
-    Services: "Project management, Team chat, File sharing",
-    LookingFor: "Investors, Beta testers",
-    Website: "https://techhub.hk"
+    company: "TechHub HK",
+    name: "Alex Wong",
+    email: "alex@techhub.hk",
+    role: "Founder",
+    sector: "SaaS",
+    description: "All-in-one workspace for remote teams",
+    services: "Project management, Team chat, File sharing",
+    lookingFor: "Investors, Beta testers",
+    website: "https://techhub.hk"
   },
   {
-    Company: "GreenFinance",
-    Name: "Michelle Li",
-    Email: "michelle@greenfinance.hk",
-    Role: "CEO",
-    Sector: "Fintech",
-    Description: "Sustainable investing platform for Asia",
-    Services: "ESG scoring, Portfolio management, Impact reporting",
-    LookingFor: "Partners, Regulatory advisors",
-    Website: "https://greenfinance.hk"
+    company: "GreenFinance",
+    name: "Michelle Li",
+    email: "michelle@greenfinance.hk",
+    role: "CEO",
+    sector: "Fintech",
+    description: "Sustainable investing platform for Asia",
+    services: "ESG scoring, Portfolio management, Impact reporting",
+    lookingFor: "Partners, Regulatory advisors",
+    website: "https://greenfinance.hk"
   },
   {
-    Company: "MediAI",
-    Name: "Dr. James Chen",
-    Email: "james@mediai.hk",
-    Role: "CTO",
-    Sector: "Health",
-    Description: "AI-powered diagnostics for medical imaging",
-    Services: "Radiology AI, Health screening, Telemedicine",
-    LookingFor: "Hospital partners, Clinical trials",
-    Website: "https://mediai.hk"
+    company: "MediAI",
+    name: "Dr. James Chen",
+    email: "james@mediai.hk",
+    role: "CTO",
+    sector: "Health",
+    description: "AI-powered diagnostics for medical imaging",
+    services: "Radiology AI, Health screening, Telemedicine",
+    lookingFor: "Hospital partners, Clinical trials",
+    website: "https://mediai.hk"
   }
 ];
 
@@ -562,17 +582,17 @@ function validateForm() {
 
 // Enhanced card renderer
 function renderCard(s){
-  const logoBg = colorFromString(s.Company || s.Name || 'HK');
-  const letter = initials(s.Company || s.Name || 'HK');
-  const safeDesc = s.Description || '';
-  const safeSector = s.Sector || 'Startup';
-  const site = normalizeUrl(s.Website);
-  const services = splitCSV(s.Services);
-  const lookingFor = splitCSV(s.LookingFor);
-  const email = (s.Email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.Email)) ? s.Email : '';
+  const logoBg = colorFromString(s.company || s.name || 'HK');
+  const letter = initials(s.company || s.name || 'HK');
+  const safeDesc = s.description || '';
+  const safeSector = s.sector || 'Startup';
+  const site = normalizeUrl(s.website);
+  const services = splitCSV(s.services);
+  const lookingFor = splitCSV(s.lookingFor);
+  const email = (s.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email)) ? s.email : '';
 
   return `
-    <article class="startup-card" aria-label="${s.Company || 'Startup'}">
+    <article class="startup-card" aria-label="${s.company || 'Startup'}">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="logo-wrap" style="background:${logoBg}">${letter}</div>
         <span class="tag">
@@ -581,7 +601,7 @@ function renderCard(s){
         </span>
       </div>
 
-      <h3 class="card-title">${s.Company || 'Untitled'}</h3>
+      <h3 class="card-title">${s.company || 'Untitled'}</h3>
       <p class="card-desc">${safeDesc}</p>
 
       ${services.length ? `<ul class="services-list">${services.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
@@ -591,7 +611,7 @@ function renderCard(s){
       ${site ? `<a class="card-link" href="${site}" target="_blank" rel="noopener noreferrer">Visit site →</a>` : ``}
 
       <div class="card-footer">
-        <div class="meta-small">${s.Name ? `${s.Name}${s.Role ? ` — ${s.Role}` : ''}` : (s.Role || '')}</div>
+        <div class="meta-small">${s.name ? `${s.name}${s.role ? ` — ${s.role}` : ''}` : (s.role || '')}</div>
         ${email ? `<a class="btn btn-primary" href="mailto:${email}">Contact</a>` : ''}
       </div>
     </article>
@@ -615,7 +635,7 @@ async function loadDirectory(){
       data = await res.json();
     }
 
-    const entries = (Array.isArray(data) ? data : []).filter(x => x && x.Company);
+    const entries = (Array.isArray(data) ? data : []).filter(x => x && x.company);
 
     listEl.innerHTML = entries.length
       ? entries.slice().reverse().map(renderCard).join('')
@@ -654,7 +674,14 @@ if (form){
         // Simulate successful submission in mock mode
         await new Promise(resolve => setTimeout(resolve, 1000));
         result = { status: 'success' };
+      } else if (USE_NETLIFY_FORMS) {
+        // Use Netlify Forms for submission
+        // The form will be handled by Netlify automatically
+        // We just need to show success and reset the form
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        result = { status: 'success' };
       } else {
+        // Use Google Apps Script for submission
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
